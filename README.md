@@ -315,30 +315,33 @@ The default chessboard folders and images use the OpenCV sample. With `square_si
 
 ## Settings and outputs
 
-| In `config.py` | What it controls |
+<details>
+<summary>Settings in config.py</summary>
+
+| `config.py` settings | Purpose |
 | --- | --- |
-| `workflow` | Choose `"middlebury"`, `"calibrate"`, or `"pair"`. |
-| `scene_dir` | Middlebury split directory, such as `trainingQ`, containing the calibrated scene folders to process. |
-| `visualize` | Open a summary and save it as a PNG. For Middlebury, close each window to advance through the selected split. |
-| `evaluation` | Middlebury ground-truth evaluation mode. Choose `"off"`, `"all"`, or `"non_occluded"`. |
-| `num_disparities` | Optional search span in pixels, in multiples of 16. With `None`, use the scene's rounded-up `ndisp` or `pair_num_disparities` for raw pairs. |
-| `rectification_alpha` | Use 0 to crop to valid pixels or 1 to preserve the full field of view for raw pairs. |
-| `block_size`, `uniqueness_ratio`, `speckle_window_size` | Tune matching and rejection of isolated matches. |
-| `max_depth_m` | Limit exported depths and point clouds to this distance. Evaluation uses the full depth estimate. |
-| `cloud`, `cloud_stride`, `bad_px`, `bad_depth_m` | Set point-cloud export and evaluation thresholds. |
+| `workflow`, `scene_dir` | Select `middlebury`, `calibrate`, or `pair` and set the Middlebury split path. |
+| `num_disparities` | Search span in multiples of 16 px. `None` uses rounded-up `ndisp` or `pair_num_disparities`. |
+| `block_size`, `uniqueness_ratio`, `speckle_window_size`, `rectification_alpha` | Tune matching and raw-pair cropping (0 crops, 1 keeps the full view). |
+| `visualize`, `cloud`, `cloud_stride`, `max_depth_m` | Control summary display, cloud export and sampling, and the depth limit for exports. |
+| `evaluation`, `bad_px`, `bad_depth_m` | Set the Middlebury scoring mode and error thresholds. |
+
+</details>
+
+<details>
+<summary>Output files</summary>
 
 | Artifact | Contents |
 | --- | --- |
-| `disparity_px.npy`, `depth_m.npy` | Float32 arrays at image resolution, with `NaN` for invalid values. Metric depth requires a calibrated baseline. |
-| `disparity_px.png`, `depth_m.png` | Turbo previews with black invalid pixels. The display is clipped at the 2nd and 98th percentiles recorded in `run.json`. |
-| `epipolar.png` | Horizontal guides across both rectified views for checking alignment. |
-| `left_rectified.png`, `right_rectified.png` | Rectification results from `pair`. |
-| `cloud_m.ply` | Metric XYZ and left-view RGB, sampled by `cloud_stride` along each axis. |
-| `*_error_px.*`, `*_error_m.*` | Absolute error arrays and previews on the valid reference overlap. |
-| `run.json` | Input paths, settings, calibrated geometry, preview ranges, cloud size and available metrics. |
-| `summary.png` | With visualization enabled, shows both input images, epipolar alignment, disparity and depth, a sampled point cloud when available, and run metadata. |
+| `disparity_px`, `depth_m` (`.npy`, `.png`) | Float32 maps with `NaN` for invalid pixels, plus percentile-clipped previews. Metric depth requires a calibrated baseline. |
+| `epipolar.png`, `{left,right}_rectified.png` | Alignment guides, plus rectified images in `pair` mode. |
+| `cloud_m.ply` | Sampled metric XYZ with left-view RGB. |
+| `*_error_px.*`, `*_error_m.*` | Absolute error maps and previews where estimates and reference overlap. |
+| `run.json`, `summary.png` | Run metadata and an optional visual summary. |
 
 With visualization enabled, chessboard calibration shows the detected corners and fit errors and saves a `*_summary.png` next to the calibration JSON. With a non-interactive Matplotlib backend such as Agg, the scene summaries are saved as PNGs and processing proceeds automatically.
+
+</details>
 
 ## Evaluation and example results
 
