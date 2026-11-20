@@ -1,0 +1,27 @@
+name: CI
+
+# GitHub starts this workflow when code is pushed or a pull request changes.
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    # This is a fresh Windows machine. It does not use your local Conda environment.
+    runs-on: windows-latest
+    steps:
+      # Copy the repository onto the runner.
+      - uses: actions/checkout@v6
+
+      # Match the Python version used by the project locally.
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      # Check that the code can import without downloading data or opening a window.
+      - name: Check imports
+        run: python -c "import main, matplotlib, open3d; print('Project imports successfully')"
