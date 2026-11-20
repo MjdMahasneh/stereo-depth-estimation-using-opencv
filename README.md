@@ -1,6 +1,8 @@
 # stereo-depth-estimation-opencv
 
-Recover metric depth from two camera views using classical stereo vision. This project fits a stereo rig from a chessboard, aligns the images, estimates dense correspondence with OpenCV StereoSGBM, and exports a colorized 3D point cloud with Open3D. The Middlebury example starts with rectified images and their published calibration.
+This repository implements a stereo depth estimation pipeline in Python using OpenCV and Open3D. 
+It supports stereo camera calibration and image rectification, estimates disparity with OpenCV’s StereoSGBM, and converts the resulting depth map into a colored 3D point cloud.
+The included Middlebury example uses pre-rectified images and the dataset’s published calibration
 
 ![Middlebury Motorcycle scene showing the stereo inputs, disparity and depth maps, rectification guides, and a 3D point cloud preview](assets/Motorcycle.png)
 
